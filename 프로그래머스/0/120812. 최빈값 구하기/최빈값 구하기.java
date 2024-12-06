@@ -1,27 +1,33 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[] array) {
-        int answer = 0;
-        int max = 0;
-        for (int num : array) {
-            if (num > max) {
-                max = num;
+        Arrays.sort(array); // 배열 정렬
+        int max = 0;        // 최빈값의 빈도수
+        int maxNum = -1;    // 최빈값
+        int cnt = 1;        // 현재 값의 빈도수
+
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] == array[i - 1]) {
+                cnt++; // 이전 값과 같으면 빈도수 증가
+            } else {
+                if (cnt > max) {
+                    max = cnt;       // 최대 빈도 갱신
+                    maxNum = array[i - 1]; // 최빈값 갱신
+                } else if (cnt == max) {
+                    maxNum = -1; // 동률 발생 시 -1로 설정
+                }
+                cnt = 1; // 빈도수 초기화
             }
         }
-        int[] count = new int[max + 1];
-        for (int num : array) {
-            count[num]++;
+
+        // 마지막 값 처리
+        if (cnt > max) {
+            maxNum = array[array.length - 1];
+        } else if (cnt == max) {
+            maxNum = -1;
         }
-        int countMax = 0;
-        answer = -1; 
-        for (int i = 0; i < count.length; i++) {
-            if (count[i] > countMax) {
-                countMax = count[i];
-                answer = i;
-            } else if (count[i] == countMax) {
-                answer = -1; 
-            }
-        }
-        
-        return answer;
+
+        return maxNum; // 최빈값 반환
     }
 }
